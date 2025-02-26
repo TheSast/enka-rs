@@ -45,7 +45,7 @@ mod r#async {
             r.headers_mut().insert(
                 HeaderName::from_bytes(b"User-Agent").unwrap(),
                 user_agent.unwrap_or_else(|| {
-                    HeaderValue::from_static(concat!("enka-rs/v", env!("GIT_HASH")))
+                    HeaderValue::from_static(concat!("enka-rs/", env!("GIT_HASH")))
                 }),
             );
             r
