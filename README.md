@@ -92,4 +92,4 @@ Join the [discord server of enka](https://discord.gg/G3m7CWkssY). You can ping m
 
 - [Jelosus2](https://github.com/Jelosus2)/[enkanetwork-js](https://github.com/Jelosus2/enkanetwork.js)
   - Inspiration for the `stateful` crate feature.
-	- I shamelessly stole and reworded their [`README.md`](https://github.com/Jelosus2/enkanetwork.js/blob/180ccef59422f0d7adcd79ae3f2125cb880ed15e/README.md).
+  - I shamelessly stole and reworded their [`README.md`](https://github.com/Jelosus2/enkanetwork.js/blob/180ccef59422f0d7adcd79ae3f2125cb880ed15e/README.md).
