@@ -98,14 +98,12 @@ pub mod profile {
         // HACK: necessary due to https://github.com/serde-rs/serde/issues/745
         impl<'de> Deserialize<'de> for Hoyo {
             fn deserialize<D: serde::de::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
-                serde_json::Value::deserialize(d).and_then(|v| {
-                    match v.get("hoyo_type").and_then(serde_json::Value::as_u64) {
-                        Some(0) => serde_json::from_value(v)
-                            .map(Hoyo::Genshin)
-                            .map_err(serde::de::Error::custom),
-                        Some(1 | 2) => Ok(Hoyo::Other(v)),
-                        _ => Err(serde::de::Error::custom("unknown Hoyo variant")),
-                    }
+                serde_json::Value::deserialize(d).and_then(|v| match v["hoyo_type"].as_u64() {
+                    Some(0) => serde_json::from_value(v)
+                        .map(Hoyo::Genshin)
+                        .map_err(serde::de::Error::custom),
+                    Some(1 | 2) => Ok(Hoyo::Other(v)),
+                    _ => Err(serde::de::Error::custom("unknown Hoyo variant")),
                 })
             }
         }
@@ -347,11 +345,15 @@ pub enum Equip {
 // HACK: necessary due to https://github.com/serde-rs/json/issues/1103
 impl<'de> Deserialize<'de> for Equip {
     fn deserialize<D: serde::de::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
-        let v = serde_json::Value::deserialize(d)?;
-        serde_json::from_value(v.clone())
-            .map(Equip::Weapon)
-            .or_else(|_| serde_json::from_value(v).map(Equip::Reliquary))
-            .map_err(|_| serde::de::Error::custom("unknown Equip variant"))
+        serde_json::Value::deserialize(d).and_then(|v| match &v["flat"]["itemType"] {
+            serde_json::Value::String(s) if s == "ITEM_WEAPON" => serde_json::from_value(v)
+                .map(Equip::Reliquary)
+                .map_err(serde::de::Error::custom),
+            serde_json::Value::String(s) if s == "ITEM_RELIQUARY" => serde_json::from_value(v)
+                .map(Equip::Weapon)
+                .map_err(serde::de::Error::custom),
+            _ => Err(serde::de::Error::custom("unknown Equip variant")),
+        })
     }
 }
 
