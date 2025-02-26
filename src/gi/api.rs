@@ -258,7 +258,7 @@ pub struct AvatarInfo {
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct AvatarInfoFetterInfo {
-    exp_level: u8,
+    pub exp_level: u8,
 }
 
 #[derive(Deserialize, Debug, Clone)]
