@@ -2,7 +2,7 @@
 
 > [!WARNING]
 > This wrapper is in it's early stages of development, the project lacks much polish and it is likely that many breaking changes will be pushed often.  
-> The public functions in `lib::api` are the least likely to change significantly, save for the planned cache system.  
+> The public functions in `lib::gi` are the least likely to change significantly, save for the planned cache system.  
 > The current focus is on fixing any present bugs, adding proper documentation, improving the type representation of the API responses and adding an optional built in cache using Redis. Support for Honkai: Star Rail and Zenless Zone Zero will only come after that.
 
 A crate to get data from the Enka API, for Genshin Impact<!-- , Honkai: Star Rail and Zenless Zone Zero, it also includes a finder that you can use to search for names and images of game assets, for example a name or image of a character. Check [Finders](#asset-finder) for more information -->.
