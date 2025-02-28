@@ -61,8 +61,8 @@ pub mod profile {
         #[serde(deny_unknown_fields)]
         pub struct Profile {
             pub bio: String,
-            pub level: i64,       // is it permission level?
-            pub signup_state: u8, // TODO: check if it is a mistyped bool
+            pub level: i64,
+            pub signup_state: Option<u8>, // stopped appearing for unknown reasons
             pub avatar: Option<String>,
             pub image_url: Option<String>, // Patreon image
         }
@@ -120,7 +120,7 @@ pub mod profile {
             pub hash: Hash,
             pub region: Region,
             pub order: u64,
-            pub avatar_order: HashMap<AvatarId, u64>,
+            pub avatar_order: Option<HashMap<AvatarId, u64>>,
             pub hoyo_type: u8, // TODO: check, HoyoKind I assume 0 gi, 1 hsr, 2 zzz
         }
 
@@ -180,6 +180,7 @@ pub mod profile {
                 pub art_source: Option<String>,
                 pub caption: Option<String>,
                 pub honkard_width: Option<f64>,
+                pub transform: Option<serde_json::Value>,
             }
         }
     }
@@ -387,7 +388,7 @@ pub struct Reliquary {
     pub level: u8,
     pub exp: Option<u64>,
     pub main_prop_id: MainPropId,
-    pub append_prop_id_list: Vec<AppendPropId>,
+    pub append_prop_id_list: Option<Vec<AppendPropId>>,
 }
 
 type MainPropId = u32;
@@ -410,7 +411,7 @@ pub struct FlatReliquary {
     pub set_name_text_map_hash: TextMapHash,
     pub rank_level: u8,
     pub reliquary_mainstat: MainStat,
-    pub reliquary_substats: Vec<SubStat>,
+    pub reliquary_substats: Option<Vec<SubStat>>,
     pub item_type: String,
     pub icon: String,
     pub equip_type: String,
