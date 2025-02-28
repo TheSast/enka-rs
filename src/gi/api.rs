@@ -346,10 +346,10 @@ pub enum Equip {
 impl<'de> Deserialize<'de> for Equip {
     fn deserialize<D: serde::de::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
         serde_json::Value::deserialize(d).and_then(|v| match &v["flat"]["itemType"] {
-            serde_json::Value::String(s) if s == "ITEM_WEAPON" => serde_json::from_value(v)
+            serde_json::Value::String(s) if s == "ITEM_RELIQUARY" => serde_json::from_value(v)
                 .map(Equip::Reliquary)
                 .map_err(serde::de::Error::custom),
-            serde_json::Value::String(s) if s == "ITEM_RELIQUARY" => serde_json::from_value(v)
+            serde_json::Value::String(s) if s == "ITEM_WEAPON" => serde_json::from_value(v)
                 .map(Equip::Weapon)
                 .map_err(serde::de::Error::custom),
             _ => Err(serde::de::Error::custom("unknown Equip variant")),
