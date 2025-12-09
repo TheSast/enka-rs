@@ -119,9 +119,11 @@ pub mod profile {
             pub player_info: PlayerInfo,
             pub hash: Hash,
             pub region: Region,
-            pub order: u64,
+            pub order: String,
             pub avatar_order: Option<HashMap<AvatarId, u64>>,
             pub hoyo_type: u8, // TODO: check, HoyoKind I assume 0 gi, 1 hsr, 2 zzz
+            pub live_data_hash: u64,
+            pub user: info::Info,
         }
 
         #[derive(Deserialize, Debug)]
@@ -164,13 +166,14 @@ pub mod profile {
                 pub name: String,
                 pub avatar_id: String, // this is an AvatarId as a String
                 pub avatar_data: AvatarInfo,
-                pub order: u64,
+                pub order: String,
                 pub live: bool,
                 pub settings: Settings,
                 pub public: bool,
                 pub image: Option<String>,
                 pub hoyo_type: u8,
                 pub hoyo: Hash,
+                pub owner: String,
             }
 
             #[derive(Deserialize, Debug)]
@@ -213,6 +216,9 @@ pub struct PlayerInfo {
     pub tower_floor_index: Option<u8>,
     pub tower_level_index: Option<u8>,
     pub tower_star_index: Option<u8>,
+    pub stygian_id: Option<u64>,
+    pub stygian_index: Option<u8>,
+    pub stygian_seconds: Option<u64>,
     pub theater_mode_index: Option<u8>,
     pub theater_act_index: Option<u8>,
     pub theater_star_index: Option<u8>,
@@ -224,10 +230,15 @@ pub struct PlayerInfo {
 }
 
 #[derive(Deserialize, Debug, Clone)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[serde(untagged, deny_unknown_fields)]
 pub enum ProfilePicture {
-    AvatarId(AvatarId),
-    Id(ProfilePictureId),
+    #[serde(rename_all = "camelCase")]
+    AvatarId {
+        avatar_id: AvatarId,
+        costume_id: Option<CostumeId>,
+    },
+    #[serde(rename_all = "camelCase")]
+    Id { id: ProfilePictureId },
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -254,6 +265,7 @@ pub struct AvatarInfo {
     pub equip_list: Vec<Equip>,
     pub fetter_info: Option<AvatarInfoFetterInfo>,
     pub costume_id: Option<CostumeId>,
+    pub weapon_skin_id: Option<u64>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -380,6 +392,7 @@ pub struct Weapon {
     pub level: u8,
     pub promote_level: Option<u8>,
     pub affix_map: Option<HashMap<u64, u64>>, // see equip.rs
+    pub exp: Option<u64>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
@@ -412,6 +425,7 @@ pub struct FlatReliquary {
     pub rank_level: u8,
     pub reliquary_mainstat: MainStat,
     pub reliquary_substats: Option<Vec<SubStat>>,
+    pub set_id: Option<u64>,
     pub item_type: String,
     pub icon: String,
     pub equip_type: String,
