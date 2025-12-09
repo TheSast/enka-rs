@@ -51,13 +51,16 @@ mod r#async {
         req_client: Option<&Client>,
     ) -> Result<T> {
         let request = log!({
-            use reqwest::{Method, Request, Url, header::HeaderName};
+            use reqwest::{Method, Request, Url, header};
             let mut r = Request::new(
                 Method::GET,
-                Url::parse(&format!("https://enka.network{endpoint}")).unwrap(),
+                Url::parse("https://enka.network/")
+                    .unwrap()
+                    .join(endpoint)
+                    .unwrap(),
             );
             r.headers_mut().insert(
-                HeaderName::from_bytes(b"User-Agent").unwrap(),
+                header::USER_AGENT,
                 user_agent.unwrap_or_else(|| {
                     HeaderValue::from_static(concat!("enka-rs/", env!("GIT_HASH")))
                 }),
