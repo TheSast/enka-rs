@@ -102,7 +102,7 @@ pub mod profile {
                     Some(0) => serde_json::from_value(v)
                         .map(Hoyo::Genshin)
                         .map_err(serde::de::Error::custom),
-                    Some(1 | 2) => Ok(Hoyo::Other(v)),
+                    Some(1..=3) => Ok(Hoyo::Other(v)),
                     _ => Err(serde::de::Error::custom("unknown Hoyo variant")),
                 })
             }
